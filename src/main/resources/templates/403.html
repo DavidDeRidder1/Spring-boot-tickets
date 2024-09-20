@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title th:text="#{acces.denied.page}"></title>
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+	<header>
+		
+	</header>
+	<h1>HTTP Status 403 - Toegang is geweigerd</h1>
+
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" />
+		<p th:text="${user}"></p> 
+		<p th:text="${userRole}"></p>
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	</form>
+</body>
+</html>

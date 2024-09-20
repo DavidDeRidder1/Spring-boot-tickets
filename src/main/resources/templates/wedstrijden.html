@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{wedstrijdenTitel}"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <h2 th:text="|#{wedstrijdenSchermTitel} ${sport.naam}|"></h2>
+
+    <a th:if="${role.name() == 'ADMIN'}" th:href="@{/wedstrijden/sport/{sportId}/voegToe(sportId=${sport.id})}" class="btn btn-primary">Voeg Wedstrijd Toe</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th th:text="#{wedstrijdenSchermDatumHeader}"></th>
+                <th th:text="#{wedstrijdenSchermAanvangsuurHeader}"></th>
+                <th th:text="#{wedstrijdenSchermStadiumHeader}"></th>
+                <th th:text="#{wedstrijdenSchermDiscipline1Header}"></th>
+                <th th:text="#{wedstrijdenSchermDiscipline2Header}"></th>
+                <th th:text="#{wedstrijdenSchermAantalVrijePlaatsenHeader}"></th>
+                <th th:text="#{wedstrijdenSchermPrijsTicketHeader}"></th>
+                <th th:if="${role.name() == 'USER'}" th:text="#{wedstrijdenSchermKoopTicketHeader}"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="wedstrijd : ${wedstrijden}">
+                <td th:with="df=#{date.format.pattern}" th:text="${#temporals.format(wedstrijd.datum, df)}"></td>
+                <td th:text="${wedstrijd.aanvangsuur}"></td>
+                <td th:text="${wedstrijd.stadium.naam}"></td>
+                <td th:text="${wedstrijd.discipline1 != null and wedstrijd.discipline1 != '' ? wedstrijd.discipline1 : 'N/A'}"></td>
+                <td th:text="${wedstrijd.discipline2 != null and wedstrijd.discipline1 != '' ? wedstrijd.discipline2 : 'N/A'}"></td>
+                <td th:text="${wedstrijd.aantalVrijePlaatsen}"></td>
+                <td>
+    <span th:if="${role.name() == 'ADMIN'}">
+        <span th:utext="${#numbers.formatDecimal(wedstrijd.prijsTicket, 1, 'POINT', 2, 'COMMA')}"></span>
+    </span>
+    <span th:if="${role.name() == 'USER' && wedstrijd.aantalVrijePlaatsen > 0}">
+        <span th:utext="${#numbers.formatDecimal(wedstrijd.prijsTicket, 1, 'POINT', 2, 'COMMA')}"></span>
+    </span>
+    <span th:if="${role.name() != 'ADMIN' && (role.name() != 'USER' || wedstrijd.aantalVrijePlaatsen <= 0)}">N/A</span>
+</td>
+                
+                <td th:if="${role.name() == 'USER'}">
+                	<a th:href="@{/tickets/{userId}/koopTicket/{wedstrijdId}(userId=${user.id}, wedstrijdId=${wedstrijd.id})}" th:text="#{wedstrijdenSchermKoopTicketLink}"></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="/sport" th:text="#{terugNaarSportOverzicht}"></a>
+    
+    <p th:text="|Uw Rol: ${role}|"></p>
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Logout" /> 
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+</body>
+</html>

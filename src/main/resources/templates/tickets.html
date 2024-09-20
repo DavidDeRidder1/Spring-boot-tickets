@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Tickets</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <h1>Tickets van <span th:text="${user.username}">User</span></h1>
+    <p th:if="${aantalTicketsGekocht != null}" th:text="|${aantalTicketsGekocht} tickets werden aangekocht!|"></p>
+    <table>
+        <thead>
+            <tr>
+                <th th:text="Sport"></th>
+                <th th:text="Stadium"></th>
+                <th th:text="Datum"></th>
+                <th th:text="|Wedstrijd aanvangsuur|"></th>
+                <th th:text="|Prijs (&euro;)|"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ticket : ${userTickets}">
+                <td th:text="${ticket.wedstrijd.sport.naam}"></td>
+                <td th:text="${ticket.wedstrijd.stadium.naam}"></td>
+                <td th:text="${ticket.wedstrijd.datum}"></td>
+                <td th:text="${ticket.wedstrijd.aanvangsuur}"></td>
+                <td th:text="|${#numbers.formatDecimal(ticket.price, 1, 'POINT', 2, 'COMMA')}|"></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    </br>
+    </br>
+    
+    <a href="/sport" th:text="#{terugNaarSportOverzicht}"></a>
+    
+    </br>
+    </br>
+    
+    <p th:text="|Uw Rol: ${role}|"></p>
+    
+    </br>
+ 
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Logout" /> 
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+    
+</body>
+</html>
