@@ -1,3 +1,4 @@
-Setup in Spring Tool Suite 4:
-- in application.properties database gegevens invullen
-- rechterklik op project: Maven -> update project
+## Setup in Spring Tool Suite 4
+
+1. Open `application.properties` and fill in the database configuration.
+2. Right-click on the project: `Maven -> Update Project`.
